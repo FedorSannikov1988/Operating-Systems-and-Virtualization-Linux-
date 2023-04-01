@@ -1,0 +1,70 @@
+#!/bin/bash
+
+pathFolder=$1
+
+#подсчет количества символов в строке
+character_counter=${#pathFolder}
+
+#можно было бы так:
+
+#if [ -z $pathFolder ]
+#  then
+#    flagone=0
+#    echo "Ошибка ! -> Количество символов в введенной строке равно нулю"
+#  else
+#    flagone=1
+#    echo "Введенная строка -> Ок !"
+#fi
+
+#захотелось вот так:
+
+#валидация введенной строки (первый уровень проверки):
+
+#или if (( character_counter -eq 0 ))
+#или if (( character_counter = 0 ))
+if (( character_counter==0 ))
+  then
+    flagone=0
+    echo "Ошибка ! -> Количество символов в введенной строке равно нулю"
+  else
+    flagone=1
+    echo "Введенная строка -> Ок !"
+fi
+
+#валидация наличия дирректории (второй уровень проверки) :
+
+if (( flagone=1 ))
+  then
+
+if [ -d $pathFolder ]
+  then
+    flagtwo=1
+    echo "Каталог -> Ок !"
+  else
+    flagtwo=0
+    echo "Ошибка ! -> Каталога: " $pathFolder "не существует"
+
+fi
+fi
+
+#удаление файлов (даже защищенных) из дирректории с расширениями: .bak, .tmp, .backup
+
+if (( flagtwo=1 ))
+  then
+    rm -f $pathFolder/*.bak
+    rm -f $pathFolder/*.tmp
+    rm -f $pathFolder/*.backup
+fi
+
+#P.S.: Конешно можно много более кратко написать, 
+#но это же учебная задача (вот посидел покапался)
+#к примеру можно было так:
+#pathFolder=$1
+#if [ -z $pathFolder ] && [ -d $pathFolder ]
+#  then
+#    rm -f $pathFolder/*.bak
+#    rm -f $pathFolder/*.tmp
+#    rm -f $pathFolder/*.backup
+#else
+#    echo "Ошибка ! -> Введена пустая строка вместо пути к дирректории или такой дирректории не существует"
+#fi
